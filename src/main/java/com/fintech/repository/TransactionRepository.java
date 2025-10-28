@@ -38,8 +38,8 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
             "(:category IS NULL OR t.category = :category) AND " +
             "(:sourceType IS NULL OR t.sourceType = :sourceType) AND " +
             "(:accountNumber IS NULL OR t.accountNumber = :accountNumber) AND " +
-            "(:startDate IS NULL OR t.transactionDate >= :startDate) AND " +
-            "(:endDate IS NULL OR t.transactionDate <= :endDate)")
+            "(CAST(:startDate AS timestamp) IS NULL OR t.transactionDate >= :startDate) AND " +
+            "(CAST(:endDate AS timestamp) IS NULL OR t.transactionDate <= :endDate)")
     List<Transaction> findByFilters(
             @Param("category") Category category,
             @Param("sourceType") SourceType sourceType,
