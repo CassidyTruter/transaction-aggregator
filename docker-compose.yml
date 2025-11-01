@@ -31,7 +31,7 @@ services:
       DB_NAME: transactions_db
       DB_USERNAME: postgres
       DB_PASSWORD: postgres
-      SPRING_PROFILES_ACTIVE: prod
+      SPRING_PROFILES_ACTIVE: dev
     ports:
       - "8080:8080"
     depends_on:

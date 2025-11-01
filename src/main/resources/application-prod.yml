@@ -1,0 +1,38 @@
+app:
+  security:
+    admin:
+      username: ${ADMIN_USERNAME}
+      password: ${ADMIN_PASSWORD}
+
+server:
+  port: 8080
+  ssl:
+    enabled: true
+    key-store: classpath:keystore.p12
+    key-store-password: ${SSL_KEYSTORE_PASSWORD}
+    key-store-type: PKCS12
+    key-alias: banking-service
+    protocol: TLS
+    enabled-protocols: TLSv1.3,TLSv1.2
+  error:
+    include-message: never
+    include-stacktrace: never
+
+spring:
+  security:
+    sessions: stateful
+
+logging:
+  level:
+    org.springframework.security: WARN
+    com.fintech: INFO
+    org.hibernate.SQL: WARN
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: when-authorized
