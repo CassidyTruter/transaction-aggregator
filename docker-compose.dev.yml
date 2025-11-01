@@ -1,0 +1,53 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: transaction-postgres-dev
+    environment:
+      POSTGRES_DB: transactions_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-dev-data:/var/lib/postgresql/data
+    networks:
+      - transaction-network-dev
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: transaction-app-dev
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: transactions_db
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      SPRING_PROFILES_ACTIVE: dev
+      ADMIN_USERNAME: admin
+      ADMIN_PASSWORD: devPassword123
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - transaction-network-dev
+    restart: unless-stopped
+    volumes:
+      # Mount source code for hot reload (optional)
+      - ./src:/app/src:ro
+
+volumes:
+  postgres-dev-data:
+    driver: local
+
+networks:
+  transaction-network-dev:
+    driver: bridge
