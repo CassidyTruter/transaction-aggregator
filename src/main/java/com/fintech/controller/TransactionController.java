@@ -46,22 +46,9 @@ public class TransactionController {
         this.aggregationService = aggregationService;
     }
 
-    @PostMapping("/aggregate")
-    @Operation(summary = "Aggregate transactions from data sources",
-            description = "Pulls data from all data sources, categorizes, and saves to database")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Aggregation successful"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
-    })
-    public ResponseEntity<AggregationResultDTO> aggregateTransactions() {
-        logger.info("Received request to aggregate transactions");
-        AggregationResultDTO result = aggregationService.aggregateAllTransactions();
-        return ResponseEntity.ok(result);
-    }
-
     @GetMapping
-    @Operation(summary = "Get all transactions",
-            description = "Retrieve all transactions with optional filtering and pagination")
+    @Operation(summary = "Get all transactions (Providing a date range is strongly recommended)",
+            description = "Retrieve all transactions with optional (but recommended) filtering and pagination")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Transactions retrieved successfully"),
             @ApiResponse(responseCode = "400", description = "Invalid parameters")
