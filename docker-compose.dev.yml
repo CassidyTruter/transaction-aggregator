@@ -21,7 +21,7 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     container_name: transaction-app-dev
     environment:
       DB_HOST: postgres
@@ -39,10 +39,13 @@ services:
         condition: service_healthy
     networks:
       - transaction-network-dev
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      start_period: 40s
+      retries: 3
     restart: unless-stopped
-    volumes:
-      # Mount source code for hot reload (optional)
-      - ./src:/app/src:ro
 
 volumes:
   postgres-dev-data:
