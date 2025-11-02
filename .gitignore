@@ -70,3 +70,6 @@ application-dev.properties
 src/main/resources/keystore.p12
 *.p12
 *.jks
+
+# Target directory
+target/

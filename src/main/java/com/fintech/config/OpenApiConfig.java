@@ -15,9 +15,10 @@ public class OpenApiConfig {
         return new OpenAPI()
                 .info(new Info()
                         .title("Transaction Aggregation System API")
-                        .description("Financial Transaction Aggregation and Categorization System - " +
-                                "This API provides endpoints for aggregating transactions from multiple sources, " +
-                                "automatic categorization, and comprehensive reporting.")
+                        .description("A comprehensive REST API for aggregating, categorizing, and analyzing financial transactions. " +
+                                "This system provides endpoints for transaction management, category-based summaries, " +
+                                "account-level analytics, and flexible filtering capabilities. " +
+                                "Supports multiple transaction sources and automated categorization.")
                         .version("1.0.0")
                         .contact(new Contact()
                                 .name("FinTech Team")
