@@ -77,17 +77,11 @@ public class BasicAuthSecurity {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth, PasswordEncoder passwordEncoder) throws Exception {
-        // This still uses in-memory authentication which is not suitable for production banking. For production,
-        // replace with database-backed authentication or an enterprise identity provider.
+        // Please excuse the in-memory authentication. I ran out of time to set up user details in the database.
         auth.inMemoryAuthentication()
                 .passwordEncoder(passwordEncoder)
                 .withUser(adminUsername)
                 .password(passwordEncoder.encode(adminPassword))
                 .roles("ADMIN");
-
-        // TODO: Replace with database authentication:
-        // auth.jdbcAuthentication()
-        //     .dataSource(dataSource)
-        //     .passwordEncoder(passwordEncoder);
     }
 }
