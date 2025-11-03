@@ -18,7 +18,7 @@ various ways that the credentials can be exposed, since they are in plain text i
 .env file. I was intending to store user credentials in a database with password
 hashing. 
 - **Basic Auth**: I only had time to implement Basic Auth for authentication
-(with SSL for prod), but if I had more time, I would have liked to implement OAuth2
+(with TLS for prod), but if I had more time, I would have liked to implement OAuth2
 authentication for prod. If I had done that, I would have used dev to show that my 
 implementation works, and prod would have been the OAuth2 version which would not
 have been directly testable because I wouldn't have had access to a real OAuth2 provider.
@@ -40,13 +40,52 @@ transactions in the database will increase every 10 seconds.
 ## How to build, run and test this project
 
 ### Prod vs Dev
-There are two environments that can be run. I would recommend running prod, so I'm giving those 
-instructions first, but I'll give the dev instructions afterwards.
+There are two environments that can be run. I would recommend running dev, so I'm giving those 
+instructions first, but I'll give the prod instructions afterwards. The main difference is that prod
+uses TLS.
 
 ### Prerequisites
 - Clone repository
 - Install Docker and Docker Compose
 - Install curl for testing
+
+### Commands for Dev
+
+```bash
+# Build and start
+docker-compose -f docker-compose.dev.yml build --no-cache
+docker-compose -f docker-compose.dev.yml --env-file .env.dev up -d
+```
+
+**Access:** `http://localhost:8080/swagger-ui.html`
+
+**Credentials:** `admin` / `devPassword123`
+
+**Testing:**
+```bash
+# Run test script
+chmod +x test-api.sh
+./test-api.sh
+```
+
+Examples of curl commands to test manually
+```bash
+# Get summary by category
+curl -u admin:devPassword123 http://localhost:8080/api/transactions/summary
+# Filter by category
+curl -u admin:devPassword123 "http://localhost:8080/api/transactions?category=INCOME"
+# Filter by account
+curl -u admin:devPassword123 "http://localhost:8080/api/transactions?accountNumber=ACC-12345-001"
+# Test health endpoint
+curl http://localhost:8080/actuator/health
+# Test filter by categories
+curl -u admin:devPassword123 "http://localhost:8080/api/transactions?category=SHOPPING&subcategory=GROCERIES"
+```
+
+**Stopping and cleaning up (deletes persisted volumes):**
+```bash
+docker-compose -f docker-compose.dev.yml down -v
+```
 
 ### Commands for Prod
 
@@ -56,15 +95,13 @@ docker-compose -f docker-compose.prod.yml build --no-cache
 docker-compose -f docker-compose.prod.yml --env-file .env up -d
 ```
 
-**Access:** `https://localhost:8443/swagger-ui.html`
-
 **Credentials:** `prodAdmin` / `kiBkwb84th9Kj2Bm0`
 
 **Testing:**
 ```bash
 # Run test script
-chmod +x test.sh
-./test.sh prod
+chmod +x test-api.sh
+./test-api.sh prod
 ```
 
 Examples of curl commands to test manually
@@ -88,41 +125,4 @@ curl -k -u prodAdmin:kiBkwb84th9Kj2Bm0 "https://localhost:8443/api/transactions?
 **Stopping and cleaning up (deletes persisted volumes):**
 ```bash
 docker-compose -f docker-compose.prod.yml down -v
-```
-
-### Commands for Dev
-
-```bash
-# Build and start
-docker-compose -f docker-compose.dev.yml build --no-cache
-docker-compose -f docker-compose.dev.yml --env-file .env.dev up -d
-```
-
-**Access:** `http://localhost:8080/swagger-ui.html`
-**Credentials:** `admin` / `devPassword123`
-
-**Testing:**
-```bash
-# Run test script
-chmod +x test.sh
-./test.sh
-```
-
-Examples of curl commands to test manually
-```bash
-# Get summary by category
-curl -u admin:devPassword123 http://localhost:8080/api/transactions/summary
-# Filter by category
-curl -u admin:devPassword123 "http://localhost:8080/api/transactions?category=INCOME"
-# Filter by account
-curl -u admin:devPassword123 "http://localhost:8080/api/transactions?accountNumber=ACC-12345-001"
-# Test health endpoint
-curl http://localhost:8080/actuator/health
-# Test filter by categories
-curl -u admin:devPassword123 "http://localhost:8080/api/transactions?category=SHOPPING&subcategory=GROCERIES"
-```
-
-**Stopping and cleaning up (deletes persisted volumes):**
-```bash
-docker-compose -f docker-compose.dev.yml down -v
 ```
