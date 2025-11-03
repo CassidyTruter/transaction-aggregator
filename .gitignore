@@ -66,10 +66,5 @@ application-dev.properties
 *.swp
 *~
 
-# SSL Certificates
-src/main/resources/keystore.p12
-*.p12
-*.jks
-
 # Target directory
 target/

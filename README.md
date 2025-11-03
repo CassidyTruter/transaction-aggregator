@@ -3,10 +3,11 @@
 ## Notes to my examiner(s)
 Dear Examiner,
 
-I'll spare you an AI-written essay. I just one to point out a few things
+I'll spare you an AI-written essay. I just need to point out a few things
 about my project.
 
-Firstly, I've tried to make the project easy to run, so I pushed the .env files.
+Firstly, I've tried to make the project easy to run, so I pushed the .env files
+and the keystore.
 Please know that I would never do this in a real-world scenario!
 
 Secondly, I ran out of time to implement some important things that would be 
