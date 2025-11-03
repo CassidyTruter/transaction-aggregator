@@ -24,13 +24,9 @@ public class TransactionAggregationService {
 
     private static final Logger logger = LoggerFactory.getLogger(TransactionAggregationService.class);
 
-    private final TransactionCategorizationService categorizationService;
     private final TransactionRepository transactionRepository;
 
-    public TransactionAggregationService(
-            TransactionCategorizationService categorizationService,
-            TransactionRepository transactionRepository) {
-        this.categorizationService = categorizationService;
+    public TransactionAggregationService(TransactionRepository transactionRepository) {
         this.transactionRepository = transactionRepository;
     }
 
